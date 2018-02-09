@@ -16,7 +16,7 @@ namespace HangMan_Quadrat
         static bool isRunning = true;
 
         static char[] alphabet;
-        static char[] errorAlphabet;
+        static string triedLetters = "";
 
         static void Main(string[] args)
         {
@@ -24,8 +24,9 @@ namespace HangMan_Quadrat
 
             alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-            Console.WriteLine("Grüß dich.\nBitte gebe dein zu erratenes Wort ein.");
-            wordToGuess = Console.ReadLine().ToUpper();
+            Console.WriteLine("Grüß dich.\n");
+            wordToGuess = Input.GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+
             Console.Clear();
             DrawUnderline();
 
@@ -50,18 +51,28 @@ namespace HangMan_Quadrat
             
         }
         
-        static bool RunGame()
+        static void RunGame()
         {
             //ask for Letter
             string inputLetter = Input.GetInput(@"^[a-zA-Z]{1}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+
             //check if letter was guessed before
+            if (triedLetters.Contains(inputLetter))
+            {
+                Console.WriteLine("'" + inputLetter + "'" + " wurde bereits geraten");
+                errorCount++;
+                return;
+            }
+
+            triedLetters += inputLetter;
 
             //check if letter is in wordToGuess
 
+
             //check if game has ended -> vicoty / lose
 
-            //if (victory || lose) return false;
-            return false;
+            //if (victory || lose) isRunning = false;;
+
         }
 
         #region Input
@@ -92,7 +103,7 @@ namespace HangMan_Quadrat
                 }
 
                 Console.ForegroundColor = ConsoleColor.Gray;
-                return input;
+                return input.ToUpper();
             }
         }
         #endregion
