@@ -106,7 +106,10 @@ namespace HangMan_Quadrat
                 if (!HandleWord(inputLetter))
                 {
                     errorCount += 2;
-
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Clear();
+                    Console.WriteLine("Das Wort '" + inputLetter + "' ist falsch!");
+                    DrawWord();
                     return;
                 }
 
@@ -131,7 +134,6 @@ namespace HangMan_Quadrat
             Console.Clear();
 
             //check if letter is in wordToGuess
-            errorCount++;
             if (wordToGuess.Contains(inputLetter))
             {
                 for (int i = 0; i < wordToGuess.Length; i++)
@@ -139,7 +141,6 @@ namespace HangMan_Quadrat
                     if (wordToGuess[i].ToString() == inputLetter)
                     {
                         progress[i] = true;
-                        errorCount--;
                     }
                 }
             }
@@ -147,6 +148,7 @@ namespace HangMan_Quadrat
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(inputLetter + " ist nicht enthalten!");
+                errorCount++;
             }
 
             DrawWord();
