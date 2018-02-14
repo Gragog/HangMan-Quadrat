@@ -28,8 +28,8 @@ namespace HangMan_Quadrat
 
             #region Greetings
             Console.WriteLine("Grüß dich.\n");
-            wordToGuess = GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
-            //wordToGuess = GetInput(2, "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+            //wordToGuess = GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+            wordToGuess = GetInput(3, "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
             #endregion
 
             progress = new bool[wordToGuess.Length];
@@ -41,7 +41,7 @@ namespace HangMan_Quadrat
             {
                 RunGame();
             }
-    
+
             #region draw end message
             Console.ForegroundColor = endColor;
             Console.WriteLine(endMessage);
@@ -83,20 +83,25 @@ namespace HangMan_Quadrat
             {
                 victory = true;
                 endColor = ConsoleColor.Green;
-                endMessage = "Gewonnen!";
+                endMessage = "Gewonnen!\n";
             }
         }
-        
+
         static void RunGame()
         {
             #region Check ob Spiel ist vorbei => vicoty || lose
             if (victory || errorCount >= 8)
             {
-                isRunning = false;
-                Console.WriteLine("\nSpiel vorbei! Das Wort war " + wordToGuess + ".");
+                Console.Clear();
 
-                #region ASCII art
-                endMessage += "\n\n" + @" ___________.._______
+                isRunning = false;
+                if (!victory)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nSpiel vorbei! Das Wort war " + wordToGuess + ".");
+
+                    #region ASCII art
+                    endMessage += "\n\n" + @" ___________.._______
 | .__________))______|
 | | / /      ||
 | |/ /       ||
@@ -119,7 +124,8 @@ namespace HangMan_Quadrat
  | |        \ \        | |
 : :          \ \       : :  
 . .           `'       . .";
-                #endregion
+                    #endregion
+                }
 
                 return;
             }
@@ -131,8 +137,8 @@ namespace HangMan_Quadrat
             * {1,}: Anzahl (min, max) => min = 1, max = unbegrenzt;
             * $: Ende des String;
             */
-            string inputLetter = GetInput("^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
-            //string inputLetter = GetInput(1, "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+            //string inputLetter = GetInput("^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+            string inputLetter = GetInput(1, "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur Buchstaben enthalten!", "Die Eingabe ist zu kurz!");
 
             #region Prüfung für Eingaben länger als ein Zeichen
             if (inputLetter.Length > 1)
@@ -148,7 +154,7 @@ namespace HangMan_Quadrat
                 }
 
                 victory = true;
-                endMessage = "Das Wort '" + wordToGuess + "' wurde erraten! Glückwunsch";
+                endMessage = "\nDas Wort '" + wordToGuess + "' wurde erraten! Glückwunsch!";
                 endColor = ConsoleColor.Green;
                 return;
             }
@@ -233,7 +239,7 @@ namespace HangMan_Quadrat
             return input.ToUpper();
         }
 
-        static public string GetInput(int minLength, string requestMessage = "enter input ", string errorMessage = "invalid input")
+        static public string GetInput(int minLength, string requestMessage = "enter input ", string errorMessage = "invalid input", string tooShortMessage = "input is too short")
         {
             bool validInput = false;
             string input = "";
@@ -244,26 +250,36 @@ namespace HangMan_Quadrat
                 Console.Write(requestMessage);
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                input = Console.ReadLine();
+                input = Console.ReadLine().ToUpper();
+                validInput = true;
 
-                // 1 Zeichen
-                if (input.Length == 1)
+                //input zu kurz
+                if (input.Length < minLength)
                 {
-                    if (alphabet.Contains(input))
-                    {
+                    validInput = false;
 
-                    }
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(tooShortMessage);
 
-                    validInput = true;
-                    break;
+                    continue;
                 }
 
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(errorMessage);
+                //Zeichen nicht im Alphabet
+                foreach (char letter in input)
+                {
+                    if (!alphabet.Contains(letter))
+                    {
+                        validInput = false;
+
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(errorMessage);
+                        break;
+                    }
+                }
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            return input.ToUpper();
+            return input;
         }
         #endregion
     }
