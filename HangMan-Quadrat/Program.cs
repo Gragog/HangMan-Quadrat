@@ -1,36 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HangMan_Quadrat
 {
     class Program
     {
+        #region Variables
         static string wordToGuess = "";
         static int errorCount = 0;
 
         static bool isRunning = true;
 
-        static char[] alphabet;
         static string triedLetters = "";
         static bool[] progress;
-        private static bool victory = false;
+        static bool victory = false;
 
         static ConsoleColor endColor = ConsoleColor.Red;
-        static string endMessage = "Noob!";
+        static string endMessage = "You're Looser!";
+        #endregion
 
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-
+            #region Greetings
             Console.WriteLine("Grüß dich.\n");
-            wordToGuess = Input.GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+            wordToGuess = GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+            #endregion
 
             progress = new bool[wordToGuess.Length];
 
@@ -41,13 +38,11 @@ namespace HangMan_Quadrat
             {
                 RunGame();
             }
-
+    
             #region draw end message
             Console.ForegroundColor = endColor;
             Console.WriteLine(endMessage);
             #endregion
-
-
 
             // last line in code...
             Console.ReadLine();
@@ -99,7 +94,7 @@ namespace HangMan_Quadrat
             }
 
             //ask for Letter
-            string inputLetter = Input.GetInput(@"^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+            string inputLetter = GetInput(@"^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
 
             if (inputLetter.Length > 1)
             {
@@ -166,35 +161,32 @@ namespace HangMan_Quadrat
         }
 
         #region Input
-        public struct Input
+        static public string GetInput(string pattern, string requestMessage = "enter input ", string errorMessage = "invalid input")
         {
-            static public string GetInput(string pattern, string requestMessage = "enter input ", string errorMessage = "invalid input")
+            Regex item = new Regex(pattern);
+            bool validInput = false;
+            string input = "";
+
+            while (!validInput)
             {
-                Regex item = new Regex(pattern);
-                bool validInput = false;
-                string input = "";
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(requestMessage);
 
-                while (!validInput)
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                input = Console.ReadLine();
+
+                if (item.IsMatch(input))
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(requestMessage);
-
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    input = Console.ReadLine();
-
-                    if (item.IsMatch(input))
-                    {
-                        validInput = true;
-                        break;
-                    }
-
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(errorMessage);
+                    validInput = true;
+                    break;
                 }
 
-                Console.ForegroundColor = ConsoleColor.Gray;
-                return input.ToUpper();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(errorMessage);
             }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            return input.ToUpper();
         }
         #endregion
     }
