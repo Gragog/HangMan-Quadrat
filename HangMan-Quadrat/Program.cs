@@ -10,6 +10,8 @@ namespace HangMan_Quadrat
         static string wordToGuess = "";
         static int errorCount = 0;
 
+        static char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
         static bool isRunning = true;
 
         static string triedLetters = "";
@@ -27,6 +29,7 @@ namespace HangMan_Quadrat
             #region Greetings
             Console.WriteLine("Grüß dich.\n");
             wordToGuess = GetInput(@"^[a-zA-Z-]{1,}$", "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
+            //wordToGuess = GetInput(2, "Bitte gebe dein zu erratenes Wort ein: ", "Eingabe fehlerhaft").ToUpper();
             #endregion
 
             progress = new bool[wordToGuess.Length];
@@ -90,7 +93,34 @@ namespace HangMan_Quadrat
             if (victory || errorCount >= 8)
             {
                 isRunning = false;
-                Console.WriteLine("\nSpiel vorbei!");
+                Console.WriteLine("\nSpiel vorbei! Das Wort war " + wordToGuess + ".");
+
+                #region ASCII art
+                endMessage += "\n\n" + @" ___________.._______
+| .__________))______|
+| | / /      ||
+| |/ /       ||
+| | /        ||.-''.
+| |/         |/  _  \
+| |          ||  `/,|
+| |          (\\`_.'
+| |         .-`--'.
+| |        /Y . . Y\
+| |       // |   | \\
+| |      //  | . |  \\
+| |     ')   |   |   (`
+| |          ||'||
+| |          || ||
+| |          || ||
+| |          || ||
+| |         / | | \
+„„„„„„„„„„|_`-' `-' |„„„ |
+| „ | „„„„„\ \       '„ | „ |
+ | |        \ \        | |
+: :          \ \       : :  
+. .           `'       . .";
+                #endregion
+
                 return;
             }
             #endregion
@@ -101,7 +131,8 @@ namespace HangMan_Quadrat
             * {1,}: Anzahl (min, max) => min = 1, max = unbegrenzt;
             * $: Ende des String;
             */
-            string inputLetter = GetInput(@"^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+            string inputLetter = GetInput("^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
+            //string inputLetter = GetInput(1, "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
 
             #region Prüfung für Eingaben länger als ein Zeichen
             if (inputLetter.Length > 1)
@@ -171,6 +202,7 @@ namespace HangMan_Quadrat
             return false;
         }
 
+        #region Input Block
         static public string GetInput(string pattern, string requestMessage = "enter input ", string errorMessage = "invalid input")
         {
             // ähnlich zu Random rng = new Random(DateTime.Now.ToString().GetHash());
@@ -200,5 +232,35 @@ namespace HangMan_Quadrat
             Console.ForegroundColor = ConsoleColor.Gray;
             return input.ToUpper();
         }
+
+        static public string GetInput(int minLength, string requestMessage = "enter input ", string errorMessage = "invalid input")
+        {
+            bool validInput = false;
+            string input = "";
+
+            while (!validInput)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(requestMessage);
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                input = Console.ReadLine();
+
+                // 1 Zeichen
+                if (input.Length == 1)
+                {
+                    //todo
+                    validInput = true;
+                    break;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(errorMessage);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            return input.ToUpper();
+        }
+        #endregion
     }
 }
