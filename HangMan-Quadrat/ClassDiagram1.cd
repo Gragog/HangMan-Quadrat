@@ -5,15 +5,8 @@
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Struct Name="HangMan_Quadrat.Program.Input">
-        <TypeIdentifier>
-          <NewMemberFileName>Program.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAAABFAAAAIEgAAAAAAAAEAIwIBAAAAAA=</HashCode>
+      <HashCode>AQAAEAAAAAAAAABFAAAAIEgAAAAAAAAEAIQIBAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>

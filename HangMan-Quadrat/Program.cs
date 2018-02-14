@@ -64,8 +64,9 @@ namespace HangMan_Quadrat
 
             #region Draw Error Count
             string errorText = errorCount.ToString() + " Fehler!";
-            int cursorOffset = Console.BufferWidth - Math.Max(errorText.ToString().Length, 1);
-            Console.CursorLeft = cursorOffset;
+            // Curser Position an Rand rechts - Länge des zu schreibenden Textes
+            Console.CursorLeft = Console.BufferWidth - Math.Max(errorText.ToString().Length, 1);
+
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write(errorText);
@@ -85,17 +86,24 @@ namespace HangMan_Quadrat
         
         static void RunGame()
         {
-            //check if game has ended -> vicoty / lose
+            #region Check ob Spiel ist vorbei => vicoty || lose
             if (victory || errorCount >= 8)
             {
                 isRunning = false;
-                Console.WriteLine("Spiel vorbei!");
+                Console.WriteLine("\nSpiel vorbei!");
                 return;
             }
+            #endregion
 
-            //ask for Letter
+            /** ask for Letter
+            * ^: Anfang des String;
+            * []: Gruppierung einzelner Zeichen;
+            * {1,}: Anzahl (min, max) => min = 1, max = unbegrenzt;
+            * $: Ende des String;
+            */
             string inputLetter = GetInput(@"^[a-zA-Z]{1,}$", "Eingabe eines neuen Buchstabens: ", "Die Eingabe darf nur ein Buchstabe sein!");
 
+            #region Prüfung für Eingaben länger als ein Zeichen
             if (inputLetter.Length > 1)
             {
                 if (!HandleWord(inputLetter))
@@ -109,11 +117,13 @@ namespace HangMan_Quadrat
                 }
 
                 victory = true;
-                Console.WriteLine("Das Wort '" + wordToGuess + "' wurde erraten! Glückwunsch");
+                endMessage = "Das Wort '" + wordToGuess + "' wurde erraten! Glückwunsch";
+                endColor = ConsoleColor.Green;
                 return;
             }
+            #endregion
 
-            //check if letter was guessed before
+            #region Check Zeichen wurde bereits geraten
             if (triedLetters.Contains(inputLetter))
             {
                 Console.Clear();
@@ -125,10 +135,11 @@ namespace HangMan_Quadrat
             }
 
             triedLetters += inputLetter;
+            #endregion
 
             Console.Clear();
 
-            //check if letter is in wordToGuess
+            #region Check ob Zeichen ist in Wort
             if (wordToGuess.Contains(inputLetter))
             {
                 for (int i = 0; i < wordToGuess.Length; i++)
@@ -145,9 +156,9 @@ namespace HangMan_Quadrat
                 Console.WriteLine(inputLetter + " ist nicht enthalten!");
                 errorCount++;
             }
+            #endregion
 
             DrawWord();
-
         }
 
         private static bool HandleWord(string input)
@@ -160,9 +171,10 @@ namespace HangMan_Quadrat
             return false;
         }
 
-        #region Input
         static public string GetInput(string pattern, string requestMessage = "enter input ", string errorMessage = "invalid input")
         {
+            // ähnlich zu Random rng = new Random(DateTime.Now.ToString().GetHash());
+            // int test = rng.Next(0, 11);
             Regex item = new Regex(pattern);
             bool validInput = false;
             string input = "";
@@ -188,6 +200,5 @@ namespace HangMan_Quadrat
             Console.ForegroundColor = ConsoleColor.Gray;
             return input.ToUpper();
         }
-        #endregion
     }
 }

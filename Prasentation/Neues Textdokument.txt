@@ -1,0 +1,15 @@
+endcolor = die Farbe, für die Nachricht, die am Ende ausgegeben werden soll
+endMessage = die Nachricht, die am Ende ausgegeben werden soll
+errorCount = Fehlerzähler
+isRunning = beschreibt, ob das Spiel noch läuft
+progress = Position der Buchstaben, Welche erraten wurden (array)
+triedLetters = bereits probierte Buchstaben,
+victory = bool variable ob man gewonnne hat doer nicht
+wordToGuess = Wort was erraten werden soll
+
+Methoden groß schreiben, zur Unterscheidung von Variablen
+DrawWord()  = aktuelle fortschritt der ausgegeben wird
+Handleword() = prügung für gesamtes wort
+RunGame() = Spiel an sich 
+Main() = hauptprogramm (manager )
+getInput() = zum erhaltne einer eingabe 
