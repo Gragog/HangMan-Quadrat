@@ -10,7 +10,7 @@ namespace HangMan_Quadrat
         static string wordToGuess = "";
         static int errorCount = 0;
 
-        static char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        static string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         static bool isRunning = true;
 
@@ -249,7 +249,11 @@ namespace HangMan_Quadrat
                 // 1 Zeichen
                 if (input.Length == 1)
                 {
-                    //todo
+                    if (alphabet.Contains(input))
+                    {
+
+                    }
+
                     validInput = true;
                     break;
                 }
