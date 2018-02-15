@@ -83,7 +83,7 @@ namespace HangMan_Quadrat
             {
                 victory = true;
                 endColor = ConsoleColor.Green;
-                endMessage = "Gewonnen!\n";
+                endMessage = "Gewonnen!\n\nDas Wort war '" + wordToGuess + "'.";
             }
         }
 
